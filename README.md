@@ -1,5 +1,7 @@
 # compuational_physics_N2014301020064
-# *Name* 冉峰 
+# *Name* :
+> 冉峰 
+
 ## *BRIEF* *INTRODUCTION* :
 > This repository is for the course of compuational physics's homework
 
