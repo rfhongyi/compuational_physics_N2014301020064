@@ -3,7 +3,7 @@
 > 冉峰 
 
 ## *BRIEF* *INTRODUCTION* :
-> This repository is for the course of compuational physics's homework
+> This repository is for the course of compuational physics's homework .
 
 ## *Homework* *List*
 - [ ] Exercise_01:
