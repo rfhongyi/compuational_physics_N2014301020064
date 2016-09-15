@@ -18,7 +18,7 @@
 
 ## Homework List
 - [x] Exercise_01: 
-- [x] Exercise_02:(）
+- [x] Exercise_02:(https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/Codes/Exercise_02all）
 - [ ] Exercise_03：
 - [ ] Exercise_04：
 - [ ] Exercise_05：
