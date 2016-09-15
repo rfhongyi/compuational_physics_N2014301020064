@@ -17,7 +17,7 @@
 
 ## Homework List
 - [x] Exercise_01: 
-- [x] Exercise_02:(）
+- [x] Exercise_02:
 - [ ] Exercise_03：
 - [ ] Exercise_04：
 - [ ] Exercise_05：
