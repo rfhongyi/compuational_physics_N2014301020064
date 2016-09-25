@@ -18,7 +18,7 @@
 ## Homework List
 - [x] [Exercise_01]
 - [x] [Exercise_02](https://www.zybuluo.com/rfhongyi/note/502565)
-- [ ] [Exercise_03]
+- [x] [Exercise_03](https://www.zybuluo.com/rfhongyi/note/512636)
 - [ ] [Exercise_04]
 - [ ] [Exercise_05]
 - [ ] [Exercise_06]
