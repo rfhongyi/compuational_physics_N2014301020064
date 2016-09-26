@@ -1,0 +1,36 @@
+import time
+import os
+f = open('1.txt','r')
+line  = f.readline()
+a = []
+while line:
+    line = line[:-1]
+    a.append(line)
+    line  = f.readline()
+f.close()
+matrix = list(a)
+for b in a:
+    matrix[matrix.index(b)] = list(b)
+
+
+while True:
+    str = ""
+    for i in range(80):
+        str = "".join(matrix[i])
+        print str
+    print 
+    
+    time.sleep(0.5)
+    os.system('cls')
+    #linux(mac os)use os.system('clear')
+    for layer in range(39):
+        first = layer
+        last = 79 - layer
+        for i in range(last):
+            offset = i-layer
+            top = matrix[first][i]
+            matrix[first][i] = matrix[last-offset][first]
+            matrix[last-offset][first] = matrix[last][last-offset]
+            matrix[last][last-offset] = matrix[i][last]
+            matrix[i][last] = top
+
