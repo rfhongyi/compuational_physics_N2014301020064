@@ -1,0 +1,59 @@
+import math
+class cannon:
+    def __init__(self, vel_0=10,time_of_duration = 50,vel_0_step = 0.1,\
+    time_step = 0.01,m=100,B=0.01,vel_wind=2,θ=0,step=1,value_of_x=0,value_of_y=0,g=10,T0=300):
+        self.v0 = [vel_0]
+        self.θ = [0]
+        self.vx = [self.v0[0]]
+        self.vy = [self.v0[0]]
+        self.x = [value_of_x]
+        self.y = [value_of_y]
+        self.t = [0]
+        self.g = g
+        self.dt = time_step
+        self.time = time_of_duration
+        self.nsteps = int(time_of_duration // time_step + 1)
+        self.dθ = step
+        self.nsteps2 = int(math.pi/2//step + 1) 
+        self.B = B
+        self.m = m
+        self.dv = vel_0_step
+        self.vw = vel_wind
+        self.T0 = T0
+        self.n = 0
+    def calculate(self):
+        for k in range(1000):
+            tmpv0 = self.v0[k] + self.dv
+            self.v0.append(tmpv0)
+            for j in range(self.nsteps2):
+                tmpθ=self.θ[j] + self.dθ
+                self.θ.append(tmpθ)
+                for i in range(self.nsteps):
+                    self.vx[0] = self.v0[k] * math.cos(self.θ[j]*math.pi/180)
+                    self.vx[0] = self.v0[k] * math.sin(self.θ[j]*math.pi/180)
+                    tmpvx = self.vx[i] - self.dt * pow((1-0.0065 * self.y[i]/self.T0),2.5)\
+                    * self.B * math.sqrt(float(self.vx[i]-self.vw) * float(self.vx[i]-self.vw)\
+                    + self.vy[i] * self.vy[i]) * (self.vx[i] - self.vw)/self.m
+                    tmpvy = self.vy[i] - self.g * self.dt + self.dt * \
+                    pow((1-0.0065 * self.y[i]/self.T0),2.5) * self.B * \
+                    math.sqrt(float(self.vx[i]-self.vw) * float(self.vx[i]-self.vw)+ \
+                    self.vy[i] * self.vy[i]) * self.vy[i]/self.m
+                    tmpx=self.x[i] + self.vx[i] * self.dt
+                    tmpy=self.y[i] + self.vy[i] * self.dt
+                    self.vx.append(tmpvx)
+                    self.vy.append(tmpvy)
+                    self.x.append(tmpx)
+                    self.y.append(tmpy)
+                    self.t.append(self.t[i] + self.dt)
+                    if (self.x[i]==10):
+                        if (self.y[i] > 10):
+                            self.n=1
+                            break;
+                if (self.n==1):
+                    break;
+            if (self.n==1):
+                break;
+                print("The minimum of velocity is:%f",self.v0[k])
+
+a = cannon()
+a.calculate()
