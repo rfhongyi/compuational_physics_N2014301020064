@@ -1,0 +1,260 @@
+### Exercise_07 : Oscillatory and Motion and Chaos
+### Problem 3.12 & 3.13 & 3.14
+### *冉峰 弘毅班 2014301020064*
+---   
+
+#  Abstract
+- We can use Euler method to solve some easy questions, but to solve the problem of the oscillatory motion and chaos with the conservation of energy, we cannot solve the problems easily by Euler method. we should use Euler-Cromer method to find the answer. Also, there many factors can influence the question, we must take them into consideration.
+
+# Background
+- Now, we know the Euler-Cromer method. Now I will take the Euler-Cromer method into the oscillatory motion and chaos calculation:
+Newton’s second law for ideal pendulum with small angle:
+$$\frac{d^2\theta}{dt^2}=-\frac{g}{l}\theta$$
+Write the second-order equations as two firest-order differential equations:
+$$\frac{d\omega}{dt}=-\frac{g}{l}\theta$$$$\frac{d\theta}{dt}=\omega$$
+Finite difference form with Euler-Cromer method:
+$$\omega_{i+1}=\omega_i-(g/l)\theta_i\Delta t$$$$\theta_{i+1}=\theta_i+\omega_{i+1}\Delta t$$$$t_{i+1}=t_i+\Delta t$$
+Also to make the question a bit more realistic and more interesting we can take some factors into consideration.
+First, we do not assume the small-angle approximation, and thus do not expand $sin\theta$ term in $\theta$. Second, we include friction of the form $-q(d\theta/dt)$. Third, we add to our model a sinusoidal driving force $F_Dsin(\Omega_Dt)$.
+Putting all of these ingredients together, we have the equation of motion:$$\frac{d^2\theta}{dt^2}=-\frac{g}{l}sin\theta-q(d\theta/dt)+F_Dsin(\Omega_Dt)$$
+We can again rewrite the two-order differential equation as two first-order differential equations and otian:
+$$\frac{d\omega}{dt}=-\frac{g}{l}sin\theta-q(d\theta/dt)+F_Dsin(\Omega_Dt)$$$$\frac{d\theta}{dt}=\omega$$
+Finite difference form with Euler-Cromer method:
+$$\omega_{i+1}=\omega_i+[-(g/l)sin\theta_i-q\omega_i+F_Dsin(\Omega_Dt_i)]\Delta t$$$$\theta_{i+1}=\theta_i+\omega_{i+1}\Delta t$$$$t_{i+1}=t_i+\Delta t$$
+If $\theta_{i+1}$ is out of the range $[-\pi,\pi]$, add or subtract $2\pi$ to keep it in this range.
+For exercise 3.13 and 3.14,we know that :$$\Delta\theta\approx e^{\lambda t}$$ from the book.
+
+
+---
+# The Main Body
+Exercise 3.12, we could just easily have chosen to make the plot at times corresponding to a maximum of drive force, or at times $\pi/4$ out-of-phase with this force, etc.
+[code](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/Exercise_07.3)
+```
+import pylab as pl
+import math
+class oscillatory:
+    def __init__(self,g=9.8,l=9.8,q=0.5,F_D=1.2,O_D=2/3,time_step=0.001,\
+    total_time=5000,initial_theta=0.2,initial_omega=0):
+        self.g=g
+        self.l=l
+        self.q=q
+        self.F=F_D
+        self.O=O_D
+        self.t=[0]
+        self.initial_theta=initial_theta
+        self.initial_omega=initial_omega
+        self.dt=time_step
+        self.time= total_time
+        self.omega= [initial_omega]
+        self.theta= [initial_theta]
+        self.nsteps=int(total_time//time_step+1)
+        self.tmpo=[0]
+        self.tmpt=[0]
+    def run(self):
+        for i in range(self.nsteps):
+            tmpo=self.omega[i]+(-1*(self.g/self.l)*math.sin(self.theta[i])-\
+            self.q*self.omega[i]+self.F*math.sin(self.O*self.t[i]))*self.dt
+            tmpt=self.theta[i]+tmpo*self.dt
+            while(tmpt<(-1*math.pi) or tmpt>math.pi):
+                if tmpt<(-1*math.pi):
+                   tmpt+=2*math.pi
+                if tmpt>math.pi:
+                   tmpt-=2*math.pi
+            self.omega.append(tmpo)
+            self.theta.append(tmpt)
+            self.t.append(self.t[i]+self.dt)
+        for i in range(self.nsteps):           
+            if self.t[i]%(2*math.pi/self.O)<0.01:
+                self.tmpo.append(self.omega[i])
+                self.tmpt.append(self.theta[i])
+    def show_results(self):
+        font = {'family': 'serif',
+                'color':  'darkred',
+                'weight': 'normal',
+                'size': 16,}
+        pl.plot(self.tmpt ,self.tmpo,'.',label='$F_{D}$=%.2f'%self.F)
+        pl.title(r'$\omega$ versus $\theta$', fontdict = font)
+        pl.xlabel(r'$\theta$(radians)')
+        pl.ylabel(r'$\omega$(rad/s)')
+        pl.legend((['$F_D$=1.2']))
+        pl.show()
+a = oscillatory()
+a.run()
+a.show_results()
+```
+### Result 
+- [result for $F_D=1.2$,$\theta=0$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.8.png) 
+- [result for $F_D=1.2$,$\theta=\pi/4$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.9.png) 
+- [result for $F_D=1.2$,$\theta=\pi/2$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.10.png) 
+- [result for $F_D=1.2$,$\theta=3\pi/4$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.11.png) 
+- [result for $F_D=1.2$,$\theta=\pi$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.12.png) 
+
+----------
+
+
+Exercise 3.13, imagine two identical pendulums only with slightly different initial angles and the difference is 0.001 rad. 
+- [code](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/Codes/Exercise_07.1)
+```
+import pylab as pl
+import math
+class oscillatory:
+    def __init__(self,g=9.8,l=9.8,q=0.5,F_D=0.5,O_D=2/3,time_step=0.04,total_time=80,initial_theta=0.2,initial_omega=0,initial_omega1=0,initial_theta1=0.201,q1=0.5):
+        self.g=g
+        self.l=l
+        self.q=q
+        self.q1=q1
+        self.F=F_D
+        self.O=O_D
+        self.t=[0]
+        self.initial_theta=initial_theta
+        self.initial_theta1=initial_theta1
+        self.initial_omega=initial_omega
+        self.dt=time_step
+        self.time= total_time
+        self.omega= [initial_omega]
+        self.omega1=[initial_omega1]
+        self.theta= [initial_theta]
+        self.theta1= [initial_theta1]
+        self.nsteps=int(total_time//time_step+1)
+        self.D=[0]
+        self.e=[0]
+    def run(self):
+        for i in range(self.nsteps):
+            tmpo=self.omega[i]+(-1*(self.g/self.l)*math.sin(self.theta[i])-\
+            self.q*self.omega[i]+self.F*math.sin(self.O*self.t[i]))*self.dt
+            tmpt=self.theta[i]+tmpo*self.dt
+            while(tmpt<(-1*math.pi) or tmpt>math.pi):
+                if tmpt<(-1*math.pi):
+                   tmpt+=2*math.pi
+                if tmpt>math.pi:
+                   tmpt-=2*math.pi
+            self.omega.append(tmpo)
+            self.theta.append(tmpt)
+            tmpo1=self.omega1[i]+(-1*(self.g/self.l)*math.sin(self.theta1[i])-\
+            self.q1*self.omega1[i]+self.F*math.sin(self.O*self.t[i]))*self.dt
+            tmpt1=self.theta1[i]+tmpo1*self.dt
+            while(tmpt1<(-1*math.pi) or tmpt1>math.pi):
+                if tmpt1<(-1*math.pi):
+                   tmpt1+=2*math.pi
+                if tmpt1>math.pi:
+                   tmpt1-=2*math.pi
+            self.omega1.append(tmpo1)
+            self.theta1.append(tmpt1)
+            self.t.append(self.t[i]+self.dt)
+            tmpD=abs(tmpt-tmpt1)
+            self.D.append(tmpD)
+            self.e.append(0.001*math.exp(-0.247*self.t[i]))
+    def show_results(self):
+        font = {'family': 'serif',
+                'color':  'darkred',
+                'weight': 'normal',
+                'size': 16,}
+        pl.semilogy(self.t,self.D)
+        pl.semilogy(self.t,self.e,'--')
+        pl.title(r'$\Delta\theta$ versus time', fontdict = font)
+        pl.xlabel('time(s)')
+        pl.ylabel(r'$\Delta\theta$(radians)')
+        pl.legend((['$F_D$=0.5']))
+        pl.show()
+a = oscillatory()
+a.run()
+a.show_results()
+```
+### Result 
+- [result for $F_D=0.5$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.1.png) 
+- [result for $F_D=0.5$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.2.png)
+- [result for $F_D=1.2$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.3.png)
+- [result for $F_D=1.2$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.4.png)
+
+----------
+Exercise 3.14, imagine two identical pendulums only with slightly different initial q and the difference is 0.001. 
+- [code](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/Exercise_07.2)
+```
+import pylab as pl
+import math
+class oscillatory:
+    def __init__(self,g=9.8,l=9.8,q=0.5,F_D=1.2,O_D=2/3,time_step=0.04,\
+    total_time=150,initial_theta=0.2,initial_omega=0,initial_omega1=0,\
+    initial_theta1=0.2,q1=0.501):
+        self.g=g
+        self.l=l
+        self.q=q
+        self.q1=q1
+        self.F=F_D
+        self.O=O_D
+        self.t=[0]
+        self.initial_theta=initial_theta
+        self.initial_theta1=initial_theta1
+        self.initial_omega=initial_omega
+        self.dt=time_step
+        self.time= total_time
+        self.omega= [initial_omega]
+        self.omega1=[initial_omega1]
+        self.theta= [initial_theta]
+        self.theta1= [initial_theta1]
+        self.nsteps=int(total_time//time_step+1)
+        self.D=[0]
+        self.e=[0]
+    def run(self):
+        for i in range(self.nsteps):
+            tmpo=self.omega[i]+(-1*(self.g/self.l)*math.sin(self.theta[i])-\
+            self.q*self.omega[i]+self.F*math.sin(self.O*self.t[i]))*self.dt
+            tmpt=self.theta[i]+tmpo*self.dt
+            while(tmpt<(-1*math.pi) or tmpt>math.pi):
+                if tmpt<(-1*math.pi):
+                   tmpt+=2*math.pi
+                if tmpt>math.pi:
+                   tmpt-=2*math.pi
+            self.omega.append(tmpo)
+            self.theta.append(tmpt)
+            tmpo1=self.omega1[i]+(-1*(self.g/self.l)*math.sin(self.theta1[i])-\
+            self.q1*self.omega1[i]+self.F*math.sin(self.O*self.t[i]))*self.dt
+            tmpt1=self.theta1[i]+tmpo1*self.dt
+            while(tmpt1<(-1*math.pi) or tmpt1>math.pi):
+                if tmpt1<(-1*math.pi):
+                   tmpt1+=2*math.pi
+                if tmpt1>math.pi:
+                   tmpt1-=2*math.pi
+            self.omega1.append(tmpo1)
+            self.theta1.append(tmpt1)
+            self.t.append(self.t[i]+self.dt)
+            tmpD=abs(tmpt-tmpt1)
+            self.D.append(tmpD)
+            self.e.append(0.001*math.exp(0.25*self.t[i]))
+    def show_results(self):
+        font = {'family': 'serif',
+                'color':  'darkred',
+                'weight': 'normal',
+                'size': 16,}
+        pl.semilogy(self.t,self.D)
+        pl.semilogy(self.t,self.e,'--')
+        pl.title(r'$\Delta\theta$ versus time', fontdict = font)
+        pl.xlabel('time(s)')
+        pl.ylabel(r'$\Delta\theta$(radians)')
+        pl.legend((['$F_D$=1.2']))
+        pl.show()
+a = oscillatory()
+a.run()
+a.show_results()
+```
+### Result 
+- [result for $F_D=0.5$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.5.png)
+- [result for $F_D=1.2$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.6.png)
+- [result for $F_D=1.2$](https://github.com/rfhongyi/compuational_physics_N2014301020064/blob/master/codes2/7.7.png)
+
+
+----------
+
+
+# Conclusion
+- We cannot easily use Euler method to solve the oscillatory motion, but we can use Euler-Cromer method. When we take many factors into consideration, the oscillatory motion will be chaos from the figure we can see. From solving the problem about oscillatory motion, we have a better known about chaos. Also, with the help of computer and Euler-Cromer method we can solve the qusetion of pendulum easily. Also, to make the question more interesting and more realistic we should think of more factor that maybe influence the answer of motion.
+
+----------
+# Thanks For
+- The book of Computational Physics, chapter 3
+
+
+
+
+
+
