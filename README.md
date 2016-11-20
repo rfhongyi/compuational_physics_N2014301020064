@@ -24,9 +24,13 @@
 - [x] [Exercise_06](https://www.zybuluo.com/rfhongyi/note/541045)
 - [x] [Exercise_07](https://www.zybuluo.com/rfhongyi/note/545857)
 - [x] [Exercise_08](https://www.zybuluo.com/rfhongyi/note/563654)
-- [ ] [Exercise_09]
+- [x] [Exercise_09](https://www.zybuluo.com/rfhongyi/note/572585)
 - [ ] [Exercise_10]
-
+- [ ] [Exercise_11]
+- [ ] [Exercise_12]
+- [ ] [Exercise_13]
+- [ ] [Exercise_14]
+- [ ] [Exercise_15]
 ---  
 
 
