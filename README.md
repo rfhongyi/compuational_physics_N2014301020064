@@ -28,7 +28,7 @@
 - [x] [Exercise_09](https://www.zybuluo.com/rfhongyi/note/572585)
 - [x] [Exercise_10](https://www.zybuluo.com/rfhongyi/note/580731)
 - [x] [Exercise_11](https://www.zybuluo.com/rfhongyi/note/589280)
-- [ ] [Exercise_12]
+- [x] [Exercise_12](https://www.zybuluo.com/rfhongyi/note/597242)
 - [ ] [Exercise_13]
 - [ ] [Exercise_14]
 - [ ] [Exercise_15]
